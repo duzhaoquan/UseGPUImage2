@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6011B7B824A8274B0089282D /* TakePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6011B7B724A8274B0089282D /* TakePhotoViewController.swift */; };
 		6011B7BA24A828A30089282D /* StillImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6011B7B924A828A30089282D /* StillImageViewController.swift */; };
+		6011B7DE24A88A0E0089282D /* timg.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6011B7DD24A88A0D0089282D /* timg.jpeg */; };
 		602786A02499FEF900DEA1AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6027869F2499FEF900DEA1AE /* AppDelegate.swift */; };
 		602786A22499FEF900DEA1AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602786A12499FEF900DEA1AE /* SceneDelegate.swift */; };
 		602786A42499FEF900DEA1AE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602786A32499FEF900DEA1AE /* ViewController.swift */; };
@@ -82,6 +83,7 @@
 /* Begin PBXFileReference section */
 		6011B7B724A8274B0089282D /* TakePhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakePhotoViewController.swift; sourceTree = "<group>"; };
 		6011B7B924A828A30089282D /* StillImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillImageViewController.swift; sourceTree = "<group>"; };
+		6011B7DD24A88A0D0089282D /* timg.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = timg.jpeg; sourceTree = "<group>"; };
 		6027869C2499FEF900DEA1AE /* UseGPUImage2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UseGPUImage2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6027869F2499FEF900DEA1AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		602786A12499FEF900DEA1AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 		6027869E2499FEF900DEA1AE /* UseGPUImage2 */ = {
 			isa = PBXGroup;
 			children = (
+				6011B7DD24A88A0D0089282D /* timg.jpeg */,
 				60E2CC75249AF9170092BDC9 /* hulu.jpg */,
 				60BA51D324A2FC780097ADAF /* MaYu.jpg */,
 				60BA51D524A2FCA00097ADAF /* Flower.jpg */,
@@ -292,6 +295,7 @@
 				602786A92499FEFF00DEA1AE /* Assets.xcassets in Resources */,
 				602786A72499FEF900DEA1AE /* Main.storyboard in Resources */,
 				60BA51D624A2FCA00097ADAF /* Flower.jpg in Resources */,
+				6011B7DE24A88A0E0089282D /* timg.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

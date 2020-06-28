@@ -28,21 +28,22 @@ class StillImageViewController: UIViewController {
                 filterType: .basicOperation,
                 range: (-1.0, 1.0, 0.0),
                 initCallback: {BrightnessAdjustment()},
-                valueChangedCallback: { (filter, value) in
-                    (filter as! BrightnessAdjustment).brightness = value
-    })
-    let renderView = RenderView(frame:CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT - 100))
+                valueChangedCallback: nil)
+    let renderView = RenderView(frame:CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT - 85))
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "图片滤镜"
         view.backgroundColor = .white
         view.addSubview(imageView)
         view.addSubview(renderView)
+        renderView.backgroundColor = .white
         renderView.isHidden = true
         view.addSubview(slider)
+        slider.isHidden = true
+        slider.addTarget(self, action: #selector(sliderValueChanged(slider:)), for: .valueChanged)
         pictureInput = PictureInput(image: imageView.image!)
         
-        let filterButton = UIButton(frame: CGRect(x: 90, y: UIScreen.main.bounds.height - 100, width: 150, height: 40))
+        let filterButton = UIButton(frame: CGRect(x: 90, y: UIScreen.main.bounds.height - 80, width: 150, height: 40))
         filterButton.setTitle("选择滤镜", for: UIControl.State.normal)
         filterButton.center.x = view.center.x
         filterButton.backgroundColor = .gray
@@ -52,6 +53,8 @@ class StillImageViewController: UIViewController {
     }
 
     @objc func ChoseFilters(btn:UIButton) {
+        imageView.isHidden = true
+        renderView.isHidden = false
         
         let fvc = FilterListTableViewController()
         fvc.filterBlock =  {  [weak self] filterModel in
@@ -76,7 +79,7 @@ class StillImageViewController: UIViewController {
         
         pictureInput.removeAllTargets()
         self.filter?.removeAllTargets()
-        renderView.isHidden = false
+        
         switch filterModel.filterType! {
             
         case .imageGenerators:
@@ -114,8 +117,6 @@ class StillImageViewController: UIViewController {
     }
     
     @objc func sliderValueChanged(slider: UISlider) {
-        
-        //           print("slider value: \(slider.value)")
         
         if let actualCallback = filterModel.valueChangedCallback {
             actualCallback(filter, slider.value)
