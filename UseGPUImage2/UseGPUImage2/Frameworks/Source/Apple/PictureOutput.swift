@@ -156,7 +156,7 @@ public extension PlatformImageType {
         }
         pipeline(picture, pictureOutput)
         picture.processImage(synchronously:true)
-        return outputImage!
+        return outputImage ?? self
     }
 }
 

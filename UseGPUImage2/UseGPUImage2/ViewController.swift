@@ -145,12 +145,15 @@ class ViewController: UIViewController, CameraDelegate {
             self.navigationController?.pushViewController(videoVC, animated: true)
             
         }else if btn.tag == 102{
-            self.renderView.removeFromSuperview()
-            self.renderView = renderView(isVideo: false)
-            self.view.addSubview(self.renderView)
-            self.cameraFiltering()
+            let movieVC = PlayMoviewViewController()
+            self.navigationController?.pushViewController(movieVC, animated: true)
+            
         }else if btn.tag == 103{
-            filteringImage()
+            let photoVC = TakePhotoViewController()
+            self.navigationController?.pushViewController(photoVC, animated: true)
+            
+        }else if btn.tag == 104{
+            self.navigationController?.pushViewController(StillImageViewController(), animated: true)
         }
     }
     func renderView(isVideo:Bool) ->RenderView  {
@@ -186,42 +189,6 @@ class ViewController: UIViewController, CameraDelegate {
         return renderView
     }
     @objc func takePhoto() {
-        // 设置保存路径
-        guard let outputPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first else { return }
-        
-        let originalPath = outputPath + "/originalImage.png"
-        print("path: \(originalPath)")
-        let originalURL = URL(fileURLWithPath: originalPath)
-        
-        let filteredPath = outputPath + "/filteredImage.png"
-        print("path: \(filteredPath)")
-        
-        let filteredlURL = URL(fileURLWithPath: filteredPath)
-        // 保存相机捕捉到的图片
-        self.camera.saveNextFrameToURL(originalURL, format: .png)
-        
-        // 保存滤镜后的图片
-        self.filter.saveNextFrameToURL(filteredlURL, format: .png)
-        
-        self.imageView.image = UIImage(contentsOfFile: filteredPath)
-        
-        self.renderView.removeFromSuperview()
-        
-//        // 如果需要处理回调，有下面两种写法
-//        let dataOutput = PictureOutput()
-//        dataOutput.encodedImageFormat = .png
-//        dataOutput.encodedImageAvailableCallback = {imageData in
-//            // 这里的imageData是截取到的数据，Data类型
-//        }
-//        self.camera --> dataOutput
-//
-        let imageOutput = PictureOutput()
-        imageOutput.encodedImageFormat = .png
-        imageOutput.imageAvailableCallback = {image in
-            // 这里的image是截取到的数据，UIImage类型
-            self.imageView.image = image
-        }
-        self.camera --> imageOutput
         
     }
     func addbutton() {
@@ -233,16 +200,24 @@ class ViewController: UIViewController, CameraDelegate {
         let buttonY = UIButton(frame: CGRect.zero)
         
         buttonY.tag = 102
-        buttonY.setTitle("拍照片", for: UIControl.State.normal)
+        buttonY.setTitle("播视频", for: UIControl.State.normal)
         buttonY.addTarget(self, action: #selector(buttonClick(btn:)), for: UIControl.Event.touchUpInside)
         buttonY.backgroundColor = UIColor.gray
         
         let buttonZ = UIButton(frame: CGRect.zero)
         buttonZ.tag = 103
-        buttonZ.setTitle("选图片", for: UIControl.State.normal)
+        buttonZ.setTitle("拍照片", for: UIControl.State.normal)
         buttonZ.addTarget(self, action: #selector(buttonClick(btn:)), for: UIControl.Event.touchUpInside)
         buttonZ.backgroundColor = UIColor.gray
         
+        let buttonW = UIButton(frame: CGRect.zero)
+        buttonW.tag = 104
+        buttonW.addTarget(self, action: #selector(buttonClick(btn:)), for: UIControl.Event.touchUpInside)
+        buttonW.setTitle("图片", for: UIControl.State.normal)
+        buttonW.backgroundColor = .gray
+
+        
+        view.addSubview(buttonW)
         view.addSubview(buttonX)
         view.addSubview(buttonY)
         view.addSubview(buttonZ)
@@ -250,9 +225,11 @@ class ViewController: UIViewController, CameraDelegate {
         buttonX.translatesAutoresizingMaskIntoConstraints = false
         buttonY.translatesAutoresizingMaskIntoConstraints = false
         buttonZ.translatesAutoresizingMaskIntoConstraints = false
-
+        buttonW.translatesAutoresizingMaskIntoConstraints = false
+        
         buttonY.widthAnchor.constraint(equalTo: buttonX.widthAnchor).isActive = true
         buttonZ.widthAnchor.constraint(equalTo: buttonX.widthAnchor).isActive = true
+        buttonW.widthAnchor.constraint(equalTo: buttonX.widthAnchor).isActive = true
 
         buttonX.leftAnchor.constraint(equalTo: view.leftAnchor,constant: 20).isActive = true
         buttonX.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -40).isActive = true
@@ -265,7 +242,12 @@ class ViewController: UIViewController, CameraDelegate {
         buttonZ.leftAnchor.constraint(equalTo: buttonY.rightAnchor,constant: 10).isActive = true
         buttonZ.topAnchor.constraint(equalTo: buttonX.topAnchor).isActive = true
         buttonZ.bottomAnchor.constraint(equalTo: buttonX.bottomAnchor).isActive = true
-        buttonZ.rightAnchor.constraint(equalTo: view.rightAnchor,constant: -20).isActive = true
+        
+        buttonW.leftAnchor.constraint(equalTo: buttonZ.rightAnchor,constant: 10).isActive = true
+        buttonW.topAnchor.constraint(equalTo: buttonX.topAnchor).isActive = true
+        buttonW.bottomAnchor.constraint(equalTo: buttonX.bottomAnchor).isActive = true
+        
+        buttonW.rightAnchor.constraint(equalTo: view.rightAnchor,constant: -20).isActive = true
     }
 
 }
@@ -308,62 +290,6 @@ extension ViewController {
         
     }
     
-    // MARK: - 从实时视频中截图图片
-    func captureImageFromVideo() {
-        
-        // 启动实时视频滤镜
-        self.cameraFiltering()
-        
-        // 设置保存路径
-        guard let outputPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first else { return }
-        
-        let originalPath = outputPath + "/originalImage.png"
-        print("path: \(originalPath)")
-        let originalURL = URL(fileURLWithPath: originalPath)
-        
-        let filteredPath = outputPath + "/filteredImage.png"
-        print("path: \(filteredPath)")
-        let filteredlURL = URL(fileURLWithPath: filteredPath)
-        
-        // 延迟1s执行，防止截到黑屏
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(1)) {
-            
-            // 保存相机捕捉到的图片
-            self.camera.saveNextFrameToURL(originalURL, format: .png)
-            
-            // 保存滤镜后的图片
-            self.filter.saveNextFrameToURL(filteredlURL, format: .png)
-            
-            // 如果需要处理回调，有下面两种写法
-            
-            let dataOutput = PictureOutput()
-            dataOutput.encodedImageFormat = .png
-            dataOutput.encodedImageAvailableCallback = {imageData in
-                // 这里的imageData是截取到的数据，Data类型
-            }
-            self.camera --> dataOutput
-            
-            let imageOutput = PictureOutput()
-            imageOutput.encodedImageFormat = .png
-            imageOutput.imageAvailableCallback = {image in
-                // 这里的image是截取到的数据，UIImage类型
-            }
-            self.camera --> imageOutput
-        }
-    }
-    //MARK:-处理已有的视频
-    func FilteringMovie(){
-        do {
-            let bundleURL = Bundle.main.resourceURL!
-            let movieURL = URL(string:"sample_iPod.m4v", relativeTo:bundleURL)!
-            movie = try MovieInput(url:movieURL, playAtActualSpeed:true)
-            filter = SaturationAdjustment()
-            movie --> filter --> renderView
-            movie.start()
-        } catch {
-            fatalError("Could not initialize rendering pipeline: \(error)")
-        }
-    }
     
     // MARK: - 处理静态图片
     func filteringImage() {

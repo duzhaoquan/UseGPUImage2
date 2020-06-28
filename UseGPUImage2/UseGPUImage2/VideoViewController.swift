@@ -106,8 +106,9 @@ class VideoViewController: UIViewController {
             }
             
         case .custom:
-            //               filterModel.customCallback!(pictureInput, filter, renderView)
-            print("ff")
+            filterModel.customCallback!(camera, filterObject, renderView)
+            filter = filterObject as? BasicOperation
+            
         }
         
         
@@ -195,7 +196,6 @@ class VideoViewController: UIViewController {
         title = "拍摄视频"
         view.backgroundColor = .white
         
-
         slider.addTarget(self, action: #selector(sliderValueChanged(slider:)), for: .valueChanged)
         self.renderView = creaatRenderView()
         view.addSubview(renderView)

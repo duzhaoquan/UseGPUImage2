@@ -16,7 +16,7 @@ let SCREEN_SIZE = Size(width: SCREEN_WIDTH_Float, height: SCREEN_WIDTH_Float)
 
 typealias InitCallback = () -> (AnyObject)
 typealias ValueChangedCallback = (AnyObject, Float) -> ()
-typealias CustomCallback = (PictureInput, AnyObject, RenderView) -> ()
+typealias CustomCallback = (ImageSource, AnyObject, RenderView) -> ()
 
 let flowerImage = UIImage(contentsOfFile: Bundle.main.path(forResource: "Flower", ofType: "jpg")!)!
 let MaYuImage = UIImage(contentsOfFile: Bundle.main.path(forResource: "MaYu", ofType: "jpg")!)!

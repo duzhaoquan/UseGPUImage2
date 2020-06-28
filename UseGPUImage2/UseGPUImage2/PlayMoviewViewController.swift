@@ -12,13 +12,35 @@ import GPUImage
 class PlayMoviewViewController: UIViewController {
 
     var filter:BasicOperation = BrightnessAdjustment()
-    var movie: MovieInput!
+    var renderView: RenderView!
+    var filterModel:FilterModel = FilterModel(name: "BrightnessAdjustment 亮度",
+                filterType: .basicOperation,
+                range: (-1.0, 1.0, 0.0),
+                initCallback: {BrightnessAdjustment()},
+                valueChangedCallback: { (filter, value) in
+                    (filter as! BrightnessAdjustment).brightness = value
+    })
+    var movie: MovieInput! = {
+        let documentsDir = try! FileManager.default.url(for:.documentDirectory, in:.userDomainMask, appropriateFor:nil, create:true)
+        let fileURL = URL(string:"test.mp4", relativeTo:documentsDir)!
+        let movie = try? MovieInput(url:fileURL, playAtActualSpeed:true)
+        return movie
+        
+    }()
+    var slider: UISlider = {
+        
+        let slider = UISlider(frame: CGRect(x: 8, y: SCREEN_HEIGHT - 30, width: SCREEN_WIDTH - 18, height: 20))
+        return slider
+    }()
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "播放视频添加滤镜"
         view.backgroundColor = .white
         addbutton()
         
+        slider.addTarget(self, action: #selector(sliderValueChanged(slider:)), for: .valueChanged)
+        view.addSubview(slider)
+        slider.isHidden = true
     }
     @objc func buttonClick(btn:UIButton){
         if btn.tag == 101 {
@@ -28,8 +50,83 @@ class PlayMoviewViewController: UIViewController {
             playMovie(btn: btn)
         }else if btn.tag == 103{
             
+            let fvc = FilterListTableViewController()
+            fvc.filterBlock =  {  [weak self] filterModel in
+                guard let `self` = self else {
+                    return
+                }
+                self.filterModel = filterModel
+                
+                self.setupFilterChain(filterModel: filterModel)
+                
+            }
+            self.navigationController?.pushViewController(fvc, animated: true)
+            
         }
     }
+    
+     func setupFilterChain(filterModel:FilterModel) {
+            title = filterModel.name
+            //           pictureInput = PictureInput(image: MaYuImage)
+            slider.minimumValue = filterModel.range?.0 ?? 0
+            slider.maximumValue = filterModel.range?.1 ?? 0
+            slider.value = filterModel.range?.2 ?? 0
+            let filterObject = filterModel.initCallback()
+            
+            movie.removeAllTargets()
+            filter.removeAllTargets()
+            renderView.sources.removeAtIndex(0)
+            switch filterModel.filterType! {
+                
+            case .imageGenerators:
+                filterObject as! ImageSource --> renderView
+                
+            case .basicOperation:
+                if let actualFilter = filterObject as? BasicOperation {
+                    filter = actualFilter
+                    movie --> actualFilter --> renderView
+                    //                   pictureInput.processImage()
+                }
+                
+            case .operationGroup:
+                if let actualFilter = filterObject as? OperationGroup {
+                    movie --> actualFilter --> renderView
+                }
+                
+            case .blend:
+                if let actualFilter = filterObject as? BasicOperation {
+                    filter = actualFilter
+                    let blendImgae = PictureInput(image: flowerImage)
+                    blendImgae --> actualFilter
+                    movie --> actualFilter --> renderView
+                    blendImgae.processImage()
+                    
+                }
+                
+            case .custom:
+                filterModel.customCallback!(movie, filterObject, renderView)
+                filter = (filterObject as? BasicOperation)!
+            }
+            
+            
+            
+            self.sliderValueChanged(slider: slider)
+        }
+           
+           @objc func sliderValueChanged(slider: UISlider) {
+               
+    //           print("slider value: \(slider.value)")
+               
+               if let actualCallback = filterModel.valueChangedCallback {
+                   actualCallback(filter, slider.value)
+               } else {
+                   slider.isHidden = true
+               }
+               
+               if filterModel.filterType! != .imageGenerators {
+                
+               }
+           }
     func addbutton() {
         let buttonX = UIButton(frame: CGRect.zero)
         buttonX.tag = 101
@@ -61,7 +158,7 @@ class PlayMoviewViewController: UIViewController {
         buttonZ.widthAnchor.constraint(equalTo: buttonX.widthAnchor).isActive = true
 
         buttonX.leftAnchor.constraint(equalTo: view.leftAnchor,constant: 20).isActive = true
-        buttonX.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 5).isActive = true
+        buttonX.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -5).isActive = true
         buttonX.heightAnchor.constraint(equalToConstant: 60).isActive = true
 
         buttonY.leftAnchor.constraint(equalTo: buttonX.rightAnchor,constant: 10).isActive = true
@@ -80,22 +177,25 @@ class PlayMoviewViewController: UIViewController {
         if btn.isSelected {
             
             btn.setTitle("stop", for: UIControl.State.normal)
+            if (movie == nil) {
+                
+                filter = SaturationAdjustment()
+                movie --> filter --> renderView
+                movie.start()
+            }else{
+                movie --> filter
+            }
             
-            let documentsDir = try! FileManager.default.url(for:.documentDirectory, in:.userDomainMask, appropriateFor:nil, create:true)
-            let fileURL = URL(string:"test.mp4", relativeTo:documentsDir)!
-            movie = try? MovieInput(url:fileURL, playAtActualSpeed:true)
-
-            let renderView1 = RenderView(frame:CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT - 60))
-            view.addSubview(renderView1)
-            filter = SaturationAdjustment()
-            movie --> filter --> renderView1
 //            movie.runBenchmark = true
-            movie.start()
+//
+            
+            
             
         }else{
             btn.setTitle("play", for: UIControl.State.normal)
-            movie.cancel()
-            
+//            movie.cancel()
+            movie.removeAllTargets()
+//            filter.removeAllTargets()
         }
     }
     

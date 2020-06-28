@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6011B7B824A8274B0089282D /* TakePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6011B7B724A8274B0089282D /* TakePhotoViewController.swift */; };
+		6011B7BA24A828A30089282D /* StillImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6011B7B924A828A30089282D /* StillImageViewController.swift */; };
 		602786A02499FEF900DEA1AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6027869F2499FEF900DEA1AE /* AppDelegate.swift */; };
 		602786A22499FEF900DEA1AE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602786A12499FEF900DEA1AE /* SceneDelegate.swift */; };
 		602786A42499FEF900DEA1AE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602786A32499FEF900DEA1AE /* ViewController.swift */; };
@@ -78,6 +80,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6011B7B724A8274B0089282D /* TakePhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakePhotoViewController.swift; sourceTree = "<group>"; };
+		6011B7B924A828A30089282D /* StillImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StillImageViewController.swift; sourceTree = "<group>"; };
 		6027869C2499FEF900DEA1AE /* UseGPUImage2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UseGPUImage2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6027869F2499FEF900DEA1AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		602786A12499FEF900DEA1AE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -141,6 +145,8 @@
 				602786A32499FEF900DEA1AE /* ViewController.swift */,
 				60BA51CA24A1ED990097ADAF /* VideoViewController.swift */,
 				60BA51CF24A1F0DB0097ADAF /* PlayMoviewViewController.swift */,
+				6011B7B724A8274B0089282D /* TakePhotoViewController.swift */,
+				6011B7B924A828A30089282D /* StillImageViewController.swift */,
 				60E2CC7E249B54A80092BDC9 /* FilterListTableViewController.swift */,
 				60E2CC7D249B54A80092BDC9 /* FilterModel.swift */,
 				602786A52499FEF900DEA1AE /* Main.storyboard */,
@@ -302,6 +308,8 @@
 				60BA51D024A1F0DB0097ADAF /* PlayMoviewViewController.swift in Sources */,
 				602786A02499FEF900DEA1AE /* AppDelegate.swift in Sources */,
 				602786A22499FEF900DEA1AE /* SceneDelegate.swift in Sources */,
+				6011B7BA24A828A30089282D /* StillImageViewController.swift in Sources */,
+				6011B7B824A8274B0089282D /* TakePhotoViewController.swift in Sources */,
 				60E2CC7F249B54A80092BDC9 /* FilterModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -461,7 +469,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.banjiudian.UseGPUImage2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.banjiudian.UseGPUImage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -479,7 +487,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.banjiudian.UseGPUImage2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.banjiudian.UseGPUImage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
